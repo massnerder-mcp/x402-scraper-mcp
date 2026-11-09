@@ -1,0 +1,23 @@
+{
+  "name": "@massnerder/x402-scraper-mcp",
+  "version": "1.0.0",
+  "description": "Zero-config MCP client wrapper for the Multi-Tier x402 Web Scraper & Structured Data Gateway on Base.",
+  "main": "index.js",
+  "bin": {
+    "x402-scraper-mcp": "./index.js"
+  },
+  "keywords": [
+    "mcp",
+    "x402",
+    "web-scraping",
+    "scraper",
+    "base",
+    "usdc",
+    "json-ld"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com"
+  }
+}
