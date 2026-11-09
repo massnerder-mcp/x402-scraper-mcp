@@ -40,3 +40,4 @@ If your agent framework supports remote SSE endpoints directly:
 
 - **URL:** `https://fretful-flap.ngrok.dev/mcp/sse`
 - **Header:** `X-402-Payment: <Base_Mainnet_USDC_Tx_Hash>`
+- [![M8ven Score](https://m8ven.ai/badge/mcp/massnerder-mcp-mcp-server-manifest-fbvhwt)](https://m8ven.ai/mcp/massnerder-mcp-mcp-server-manifest-fbvhwt?s=readme)
