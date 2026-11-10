@@ -64,4 +64,4 @@ python -u server.py
 * `BASE_RPC_URL`: Optional custom Base Mainnet JSON-RPC endpoint for transaction receipt verification.
 * `PUBLIC_BASE_URL`: Public gateway URL (defaults to `https://x402scrapes.com`).
 * `ALLOW_LOCALHOST_BYPASS`: Defaults to `true`, allowing direct `127.0.0.1` loopback connections to run tools without on-chain payment.
-* `LOCAL_ADMIN_KEY`: Optional secret key passed via `X-Local-Admin-Key` header for authenticated local/remote admin bypass.
+
