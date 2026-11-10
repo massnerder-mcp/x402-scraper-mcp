@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const DEFAULT_URL = "https://fretful-flap.ngrok.dev/mcp";
+const DEFAULT_URL = "https://x402scrapes.com";
 const TARGET_URL = process.env.X402_SCRAPER_URL || DEFAULT_URL;
 const TX_HASH = process.env.X402_PAYMENT_HASH || "";
 const FORCE_TRANSPORT = (process.env.X402_TRANSPORT || "").toLowerCase();
@@ -211,11 +211,5 @@ async function start() {
 
 start().catch((err) => {
   process.stderr.write(`Fatal MCP bridge error: ${err.message}\n`);
-  process.exit(1);
-});
-
-
-start().catch((err) => {
-  process.stderr.write(`Bridge error: ${err.message}\n`);
   process.exit(1);
 });
