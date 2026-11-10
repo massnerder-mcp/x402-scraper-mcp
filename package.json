@@ -1,6 +1,6 @@
 {
   "name": "@massnerder/x402-scraper-mcp",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Zero-config MCP v2 client wrapper (Streamable HTTP & SSE) for the Multi-Tier x402 Web Scraper & Structured Data Gateway on Base.",
   "main": "index.js",
   "bin": {
@@ -26,14 +26,13 @@
     "usdc",
     "json-ld"
   ],
-  "homepage": "https://github.com/massnerder-mcp/x402-scraper-mcp#readme",
+  "homepage": "https://github.com",
   "bugs": {
-    "url": "https://github.com/massnerder-mcp/x402-scraper-mcp/issues"
+    "url": "https://github.com"
   },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/massnerder-mcp/x402-scraper-mcp.git"
+    "url": "https://github.com"
   }
 }
-
