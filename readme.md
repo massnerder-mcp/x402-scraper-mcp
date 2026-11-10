@@ -1,63 +1,67 @@
-# @massnerder/x402-scraper-mcp
+# Multi-Tier Web Scraper & Structured Data MCP Gateway (x402)
 
-Multi-Tier Web Scraper & Structured Data MCP Gateway powered by **x402 micropayments on Base (USDC)** and **MCP SDK v2**.
+High-performance Model Context Protocol (MCP v2) web extraction gateway monetized via **x402 USDC microtransactions on Base**. Built with FastAPI, MCP SDK v2 (`MCPServer`), Playwright headless Chromium, and rotating residential proxy escalation.
 
-- **Live Gateway:** `https://fretful-flap.ngrok.dev`
-- **MCP Streamable HTTP Endpoint (Primary):** `https://fretful-flap.ngrok.dev/mcp`
-- **MCP SSE Endpoint (Legacy Fallback):** `https://fretful-flap.ngrok.dev/mcp/sse`
-- **Service Info:** `https://fretful-flap.ngrok.dev/get_service_info`
-- **LLM Manifest (`llms.txt`):** `https://fretful-flap.ngrok.dev/llms.txt`
-- **Health Check:** `https://fretful-flap.ngrok.dev/health`
+## Live Endpoints
 
-## Tools & Pricing (Base Mainnet USDC)
+* **Base URL:** `https://x402scrapes.com`
+* **MCP Streamable HTTP (v2):** `https://x402scrapes.com`
+* **MCP Legacy SSE:** `https://x402scrapes.com/sse`
+* **Health Check:** `https://x402scrapes.com`
+* **Payment & Pricing Discovery:** `https://x402scrapes.com`
+* **LLM Discovery Manifest:** `https://x402scrapes.com`
 
-| Tool | Price (USDC) | What It Does |
-| :--- | :---: | :--- |
-| `scrape_fast(url, force_browser=False)` | **$0.01** | Fast HTML-to-Markdown cleanup for unprotected pages with automatic headless browser escalation. |
-| `discover_sitemap(domain_url, limit=50)` | **$0.01** | Extracts up to 200 URLs from XML sitemaps or RSS/Atom feeds. |
-| `extract_structured(url, force_browser=False)` | **$0.05** | Extracts Schema.org JSON-LD, OpenGraph, and metadata with headless browser and residential proxy fallback. |
-| `scrape_webpage(url, force_browser=False)` | **$0.10** | Anti-bot web scraper with headless Chromium and rotating residential proxy bypass for Cloudflare and geo-blocks. |
-| `scrape_batch(urls, force_browser=False)` | **$0.25** | Concurrent extraction of up to **10 URLs** in one call with headless browser and residential proxy support. |
-| `get_service_info()` | **Free** | Returns recipient wallet address, Base chain details, and tiered USDC pricing. |
+## Tiered Tools & Pricing (Base Mainnet USDC)
 
-## Quick Install (Claude Desktop / Cursor / Cline)
+| Tool | Price (USDC) | Description |
+| :--- | :--- | :--- |
+| `scrape_fast(url, force_browser)` | **$0.01** | Fast HTML-to-Markdown extraction for unprotected pages with automatic headless browser escalation for JS-rendered shells. |
+| `discover_sitemap(domain_url, limit)` | **$0.01** | Discovers and extracts up to 200 URLs from `/sitemap.xml`, `/feed`, or `/rss.xml`. |
+| `extract_structured(url, force_browser)` | **$0.05** | Extracts Schema.org JSON-LD blocks, OpenGraph tags, SEO metadata, headings, and clean summary text with proxy fallback. |
+| `scrape_webpage(url, force_browser)` | **$0.10** | Full anti-bot scraper combining headless Chromium and rotating residential proxies to bypass Cloudflare, WAFs, and geo-blocks. |
+| `scrape_batch(urls, force_browser)` | **$0.25** | Queues up to 10 URLs asynchronously in the background and returns a `task_id` handle immediately to avoid HTTP timeouts. |
+| `get_scrape_batch_status(task_id)` | **Free** | Polls background progress and retrieves structured results for a queued `scrape_batch` task. |
+| `get_service_info()` | **Free** | Returns accepted payment token details, Base recipient wallet, and current USD pricing tiers. |
 
-Add this block to your MCP client configuration file. The bridge defaults to the v2 **Streamable HTTP (`/mcp`)** transport and automatically falls back to SSE if `X402_SCRAPER_URL` ends in `/sse`:
+## Payment Protocol (x402 on Base)
+
+* **Network:** Base Mainnet (`Chain ID: 8453`)
+* **Token:** USDC (`0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913`)
+* **Recipient Wallet:** `0x48D94E7395Ad651a4c393158eE555C4d3aA56E5e`
+* **Header:** `X-402-Payment: <0x_transaction_hash>`
+
+Unpaid tool calls return a structured MCP `PaymentRequired` payload specifying the exact micro-USDC amount and Base payment details.
+
+## Client Configuration (`mcp_config.json`)
 
 ```json
 {
   "mcpServers": {
-    "x402-web-scraper": {
-      "command": "npx",
-      "args": ["-y", "@massnerder/x402-scraper-mcp"],
-      "env": {
-        "X402_PAYMENT_HASH": "0xYOUR_BASE_USDC_TX_HASH"
+    "web-scraper-x402": {
+      "url": "https://x402scrapes.com",
+      "transport": "streamable-http",
+      "legacySseUrl": "https://x402scrapes.com/sse",
+      "payment": {
+        "protocol": "x402",
+        "network": "base",
+        "recipient": "0x48D94E7395Ad651a4c393158eE555C4d3aA56E5e",
+        "header": "X-402-Payment"
       }
     }
   }
 }
 ```
 
-### Environment Variables
+## Local Self-Hosting & Environment Variables
 
-| Variable | Default | Description |
-| :--- | :--- | :--- |
-| `X402_PAYMENT_HASH` | `""` | Base Mainnet USDC transaction hash passed in the `X-402-Payment` header. |
-| `X402_SCRAPER_URL` | `https://fretful-flap.ngrok.dev/mcp` | Gateway endpoint URL (set to `.../mcp/sse` to force legacy SSE). |
-| `X402_TRANSPORT` | `streamable-http` | Optional transport override (`streamable-http` or `sse`). |
+```bash
+pip install fastapi uvicorn httpx beautifulsoup4 markdownify playwright pydantic mcp x402 opentelemetry-api
+playwright install chromium
+python -u server.py
+```
 
-## Direct Remote Connection (No Install Required)
-
-### Streamable HTTP (Recommended — MCP v2)
-
-- **URL:** `https://fretful-flap.ngrok.dev/mcp`
-- **Transport:** `streamable-http`
-- **Header:** `X-402-Payment: <Base_Mainnet_USDC_Tx_Hash>`
-
-### Legacy SSE (Backward Compatibility)
-
-- **URL:** `https://fretful-flap.ngrok.dev/mcp/sse`
-- **Transport:** `sse`
-- **Header:** `X-402-Payment: <Base_Mainnet_USDC_TX_HASH>`
-
-- [![M8ven Score](https://m8ven.ai/badge/mcp/massnerder-mcp-mcp-server-manifest-fbvhwt)](https://m8ven.ai/mcp/massnerder-mcp-mcp-server-manifest-fbvhwt?s=readme)
+* `PROXY_URL`: Optional residential proxy URL (e.g., `http://user:pass@host:port`) for `scrape_webpage`, `extract_structured`, and `scrape_batch`.
+* `BASE_RPC_URL`: Optional custom Base Mainnet JSON-RPC endpoint for transaction receipt verification.
+* `PUBLIC_BASE_URL`: Public gateway URL (defaults to `https://x402scrapes.com`).
+* `ALLOW_LOCALHOST_BYPASS`: Defaults to `true`, allowing direct `127.0.0.1` loopback connections to run tools without on-chain payment.
+* `LOCAL_ADMIN_KEY`: Optional secret key passed via `X-Local-Admin-Key` header for authenticated local/remote admin bypass.
